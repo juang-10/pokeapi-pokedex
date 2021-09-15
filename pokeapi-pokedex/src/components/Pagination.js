@@ -1,23 +1,20 @@
 import React from "react";
+import { LeftArrow, RightArrow } from "./ArrowsSvg";
 
 const Pagination = (props) => {
     const {onLeftClick, onRightClick, page, totalPages} = props;
 
     return (
         <div className="pagination">
-            <button onClick={onLeftClick}>
-                <div>
-                    <span role="img" aria-label="left">
-                        👈
-                    </span> 
+            <button className="pagination-btn" onClick={onLeftClick}>
+                <div className="icon">
+                    <LeftArrow/>
                 </div>
             </button>
             <div>{page} de {totalPages}</div>
-            <button onClick={onRightClick}>
-                <div>
-                    <span role="img" aria-label="right">
-                        👉
-                    </span> 
+            <button className="pagination-btn" onClick={onRightClick}>
+                <div className="icon">
+                    <RightArrow/>
                 </div>
             </button>
         </div>
