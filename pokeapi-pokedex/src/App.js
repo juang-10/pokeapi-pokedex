@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import './App.css';
 import Navbar from './components/Navbar';
 import Pokedex from './components/Pokedex';
@@ -7,32 +7,45 @@ import { getPokemonData, getPokemons } from "./api";
 import { FavoriteProvider } from "./contexts/favoritesContext";
 
 const {useState, useEffect} = React;
+const localStorageKey = "favorite_pokemon";
 
 export default function App() {
   const [pokemons, setPokemons] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [favorites, setFavorites] = useState(["raichu"]);
+  const [favorites, setFavorites] = useState(["bulbasaur"]);
   
   const fetchPokemons = async () => {
     try {
       setLoading(true);
-      const data = await getPokemons(25, 25 * page);
+      const data = await getPokemons(99, 99 * page); // Cuantos quiero mostrar por página
       const promises = data.results.map( async (pokemon) => {
         return await getPokemonData(pokemon.url)
       })
       const results = await Promise.all(promises)
       setPokemons(results)
       setLoading(false)
-      setTotal(Math.ceil(data.count / 25))
+      setTotal(Math.ceil(data.count / 99)) // Cantidad de registro totales
     } catch (err) {}
   }
 
+  const loadFavoritePokemons = () => {
+    const pokemons = JSON.parse(window.localStorage.getItem(localStorageKey)) || [];
+    setFavorites(pokemons);
+  }
+
   useEffect(() => {
+    console.log('Obteniendo pokemones favoritos');
+    loadFavoritePokemons();
+  },[])
+
+  useEffect(() => {
+    console.log('Obteniendo todos los pokemones');
     fetchPokemons();
   }, [page]);
 
+  // Cargar nuestor pokemon favorito
   const updateFavoritePokemons = (name) => {
     const updated = [...favorites]
     const isFavorite = updated.indexOf(name);
@@ -43,6 +56,9 @@ export default function App() {
     }
 
     setFavorites(updated)
+
+    // Mantener guardado en el local storage nuestros pokemons fav
+    window.localStorage.setItem(localStorageKey, JSON.stringify(updated));
   }
   return (
     <FavoriteProvider 
