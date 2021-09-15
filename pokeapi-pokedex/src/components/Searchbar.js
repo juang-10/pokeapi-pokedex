@@ -2,16 +2,18 @@ import React from "react";
 import { searchPokemon } from "../api";
 const {useState} = React;
 
-const Searchbar = () => {
+const Searchbar = (props) => {
+    const {onSearch} = props;
     const [search, setSearch] = useState('');
-    const[pokemon, setPokemon] = useState('');
 
     const onChange = (e) => {
         setSearch(e.target.value);
+        if(e.target.value.length === 0) {
+            onSearch(null);
+        }
     }
     const onClick = async (e) => {
-        const data = await searchPokemon(search);
-        setPokemon(data);
+        onSearch(search); // Llama la función de la linea 65 del comoponente padre (app.js)
     }
     
     return (
