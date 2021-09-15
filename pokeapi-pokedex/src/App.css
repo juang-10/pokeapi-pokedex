@@ -110,3 +110,9 @@ nav {
 .card-top h3 {
   text-transform: capitalize;
 }
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
