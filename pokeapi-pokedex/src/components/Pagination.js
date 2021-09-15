@@ -6,11 +6,19 @@ const Pagination = (props) => {
     return (
         <div className="pagination">
             <button onClick={onLeftClick}>
-                <div>👈</div>
+                <div>
+                    <span role="img" aria-label="left">
+                        👈
+                    </span> 
+                </div>
             </button>
             <div>{page} de {totalPages}</div>
             <button onClick={onRightClick}>
-                <div>👉</div>
+                <div>
+                    <span role="img" aria-label="right">
+                        👉
+                    </span> 
+                </div>
             </button>
         </div>
     )
