@@ -3,7 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Pokedex from './components/Pokedex';
 import Searchbar from './components/Searchbar';
-import { getPokemonData, getPokemons } from "./api";
+import { getPokemonData, getPokemons, searchPokemon } from "./api";
 import { FavoriteProvider } from "./contexts/favoritesContext";
 
 const {useState, useEffect} = React;
@@ -15,6 +15,7 @@ export default function App() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState(["bulbasaur"]);
+  const [notFound, setNotFound ] = useState(false); // No encontrar un pokemon
   
   const fetchPokemons = async () => {
     try {
@@ -24,9 +25,10 @@ export default function App() {
         return await getPokemonData(pokemon.url)
       })
       const results = await Promise.all(promises)
-      setPokemons(results)
-      setLoading(false)
+      setPokemons(results);
+      setLoading(false);
       setTotal(Math.ceil(data.count / 99)) // Cantidad de registro totales
+      setNotFound(false);;
     } catch (err) {}
   }
 
@@ -60,6 +62,25 @@ export default function App() {
     // Mantener guardado en el local storage nuestros pokemons fav
     window.localStorage.setItem(localStorageKey, JSON.stringify(updated));
   }
+
+  // Búsqueda del pokemon dentro de la pokedex
+  const onSearch = async (pokemon) => {
+    // Si no hay resultado de búsqueda, mostrarnos todos los pokemons (if)
+    if(!pokemon) {
+      return fetchPokemons();
+    }
+    setLoading(true)
+    const result = await searchPokemon(pokemon);
+    if(!result) {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    } else {
+      setPokemons([result]);
+    }
+    setLoading(false)
+  }
+
   return (
     <FavoriteProvider 
       value={{
@@ -69,14 +90,18 @@ export default function App() {
     <div>
       <Navbar/>
       <div className="App">
-        <Searchbar/>
-        <Pokedex
-          loading={loading} 
-          pokemons={pokemons}
-          page = {page}
-          setPage = {setPage}
-          total = {total}
-        />
+        <Searchbar onSearch={onSearch}/>
+        {notFound ?
+        <div className="not-found-text">No se encontró el pokemon que buscabas 😔</div>
+        :
+          <Pokedex
+            loading={loading} 
+            pokemons={pokemons}
+            page = {page}
+            setPage = {setPage}
+            total = {total}
+          />
+        }
       </div>
     </div>
     </FavoriteProvider>
