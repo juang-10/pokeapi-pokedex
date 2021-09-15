@@ -15,6 +15,7 @@ export default function App() {
   
   const fetchPokemons = async () => {
     try {
+      setLoading(true);
       const data = await getPokemons(25, 25 * page);
       const promises = data.results.map( async (pokemon) => {
         return await getPokemonData(pokemon.url)
@@ -34,16 +35,13 @@ export default function App() {
       <Navbar/>
       <div className="App">
         <Searchbar/>
-        { loading ? (
-          <div>Cargando Pokemones</div>
-        ) : (
-        <Pokedex 
+        <Pokedex
+          loading={loading} 
           pokemons={pokemons}
           page = {page}
           setPage = {setPage}
           total = {total}
         />
-        )}
       </div>
     </div>
   );
