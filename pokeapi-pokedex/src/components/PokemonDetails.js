@@ -21,5 +21,31 @@ const TYPE_COLORS = {
   water: '3295F6'
 };
 export default class PokemonDetails extends Component {
-
+  state = {
+    name: '',
+    pokemon: '',
+    imageUrl: '',
+    types: [],
+    description: '',
+    statTitleWidth: 3,
+    statBarWidth: 9,
+    stats: {
+      hp: '',
+      attack: '',
+      defense: '',
+      speed: '',
+      specialAttack: '',
+      specialDefense: ''
+    },
+    height: '',
+    weight: '',
+    eggGroups: '',
+    catchRate: '',
+    abilities: '',
+    genderRatioMale: '',
+    genderRatioFemale: '',
+    evs: '',
+    hatchSteps: '',
+    themeColor: '#EF5350'
+  };
 }
