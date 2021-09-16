@@ -1,109 +1,17 @@
-import React, { useContext } from "react";
-import './App.css';
-import Navbar from './components/Navbar';
-import Pokedex from './components/Pokedex';
-import Searchbar from './components/Searchbar';
-import { getPokemonData, getPokemons, searchPokemon } from "./api";
-import { FavoriteProvider } from "./contexts/favoritesContext";
-
-const {useState, useEffect} = React;
-const localStorageKey = "favorite_pokemon";
+import React from "react";
+import MainComponent from "./components/MainComponent";
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import PokemonDetails from "./components/PokemonDetails";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
-  const [pokemons, setPokemons] = useState([]);
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [favorites, setFavorites] = useState(["bulbasaur"]);
-  const [notFound, setNotFound ] = useState(false); // No encontrar un pokemon
-  
-  const fetchPokemons = async () => {
-    try {
-      setLoading(true);
-      const data = await getPokemons(99, 99 * page); // Cuantos quiero mostrar por página
-      const promises = data.results.map( async (pokemon) => {
-        return await getPokemonData(pokemon.url)
-      })
-      const results = await Promise.all(promises)
-      setPokemons(results);
-      setLoading(false);
-      setTotal(Math.ceil(data.count / 99)) // Cantidad de registro totales
-      setNotFound(false);;
-    } catch (err) {}
-  }
-
-  const loadFavoritePokemons = () => {
-    const pokemons = JSON.parse(window.localStorage.getItem(localStorageKey)) || [];
-    setFavorites(pokemons);
-  }
-
-  useEffect(() => {
-    console.log('Obteniendo pokemones favoritos');
-    loadFavoritePokemons();
-  },[])
-
-  useEffect(() => {
-    console.log('Obteniendo todos los pokemones');
-    fetchPokemons();
-  }, [page]);
-
-  // Cargar nuestor pokemon favorito
-  const updateFavoritePokemons = (name) => {
-    const updated = [...favorites]
-    const isFavorite = updated.indexOf(name);
-    if(isFavorite >= 0) {
-      updated.splice(isFavorite, 1);
-    } else {
-      updated.push(name);
-    }
-
-    setFavorites(updated)
-
-    // Mantener guardado en el local storage nuestros pokemons fav
-    window.localStorage.setItem(localStorageKey, JSON.stringify(updated));
-  }
-
-  // Búsqueda del pokemon dentro de la pokedex
-  const onSearch = async (pokemon) => {
-    // Si no hay resultado de búsqueda, mostrarnos todos los pokemons (if)
-    if(!pokemon) {
-      return fetchPokemons();
-    }
-    setLoading(true)
-    const result = await searchPokemon(pokemon);
-    if(!result) {
-      setNotFound(true);
-      setLoading(false);
-      return;
-    } else {
-      setPokemons([result]);
-    }
-    setLoading(false)
-  }
-
   return (
-    <FavoriteProvider 
-      value={{
-        favoritePokemons: favorites, 
-        updateFavoritePokemons: updateFavoritePokemons
-      }}>
-    <div>
-      <Navbar/>
-      <div className="App">
-        <Searchbar onSearch={onSearch}/>
-        {notFound ?
-        <div className="not-found-text">No se encontró el pokemon que buscabas 😔</div>
-        :
-          <Pokedex
-            loading={loading} 
-            pokemons={pokemons}
-            page = {page}
-            setPage = {setPage}
-            total = {total}
-          />
-        }
-      </div>
-    </div>
-    </FavoriteProvider>
+    // <MainComponent/>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={MainComponent}/>
+        <Route exact path="/details/:pokemon" component={PokemonDetails}/>
+      </Switch>
+    </BrowserRouter>
   );
 }
