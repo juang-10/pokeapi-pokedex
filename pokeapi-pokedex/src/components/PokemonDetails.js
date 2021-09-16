@@ -137,6 +137,22 @@ export default class PokemonDetails extends Component {
           return;
         }
       });
+
+      const femaleRate = res.data['gender_rate'];
+      const genderRatioFemale = 12.5 * femaleRate;
+      const genderRatioMale = 12.5 * (8 - femaleRate);
+
+      const catchRate = Math.round((100 / 255) * res.data['capture_rate']);
+
+      const eggGroups = res.data['egg_groups']
+        .map(group => {
+          return group.name
+            .toLowerCase()
+            .split(' ')
+            .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(' ');
+        })
+        .join(', ');
     });
   }
 }
