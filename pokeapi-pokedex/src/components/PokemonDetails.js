@@ -153,6 +153,38 @@ export default class PokemonDetails extends Component {
             .join(' ');
         })
         .join(', ');
+        const hatchSteps = 255 * (res.data['hatch_counter'] + 1);
+
+      this.setState({
+        description,
+        genderRatioFemale,
+        genderRatioMale,
+        catchRate,
+        eggGroups,
+        hatchSteps
+      });
+    });
+    
+    this.setState({
+      imageUrl,
+      pokemon,
+      name,
+      types,
+      stats: {
+        hp,
+        attack,
+        defense,
+        speed,
+        specialAttack,
+        specialDefense
+      },
+      themeColor,
+      height,
+      weight,
+      abilities,
+      evs
     });
   }
+
+  
 }
