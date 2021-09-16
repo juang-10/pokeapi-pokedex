@@ -48,4 +48,9 @@ export default class PokemonDetails extends Component {
     hatchSteps: '',
     themeColor: '#EF5350'
   };
+  
+  async componentDidMount() {
+    const { pokemon } = this.props.match.params;
+    console.log(pokemon);
+  }
 }
