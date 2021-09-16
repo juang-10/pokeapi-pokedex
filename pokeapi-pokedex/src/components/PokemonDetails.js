@@ -128,7 +128,15 @@ export default class PokemonDetails extends Component {
       })
       .join(', ');
     
-      
-
+    // Obtener la descripción de Pokemon .... Es de un end point diferente
+    await Axios.get(pokemonSpeciesUrl).then(res => {
+      let description = '';
+      res.data.flavor_text_entries.some(flavor => {
+        if (flavor.language.name === 'en') {
+          description = flavor.flavor_text;
+          return;
+        }
+      });
+    });
   }
 }
