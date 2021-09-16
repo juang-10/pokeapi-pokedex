@@ -13,11 +13,11 @@ const Navbar = () => {
     return (
         <nav>
             <Link to="/">
-            <div/>
+            <div>
                 <div>
                     <img src={imgUrl} alt="pokeapi-logo" className="navbar-image"/>
                 </div>
-            <div/>
+            </div>
             </Link>
             <div>❤️ {favoritePokemons.length}</div>
         </nav>
