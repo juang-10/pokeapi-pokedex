@@ -83,6 +83,10 @@ nav {
   background: #D1F2FE !important;
 }
 
+.container {
+  padding: 4vh 4vw;
+}
+
 .pokemon-card {
   display: flex;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, .25);
