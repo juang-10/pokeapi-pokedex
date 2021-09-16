@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react';}
+import Axios from 'axios';
 
 const TYPE_COLORS = {
   bug: 'B1C12E',
@@ -56,6 +57,9 @@ export default class PokemonDetails extends Component {
     // Urls para información de pokemon
     const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${pokemon}/`;
     const pokemonSpeciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`;
+
+    // Obtenga información de Pokemon
+    const pokemonRes = await Axios.get(pokemonUrl);
 
   }
 }
