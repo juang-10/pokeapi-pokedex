@@ -61,5 +61,36 @@ export default class PokemonDetails extends Component {
     // Obtenga información de Pokemon
     const pokemonRes = await Axios.get(pokemonUrl);
 
+    const name = pokemonRes.data.name;
+    console.log(name);
+    const imageUrl = pokemonRes.data.sprites.front_default;
+
+    let { hp, attack, defense, speed, specialAttack, specialDefense } = '';
+
+    pokemonRes.data.stats.map(stat => {
+      switch (stat.stat.name) {
+        case 'hp':
+          hp = stat['base_stat'];
+          break;
+        case 'attack':
+          attack = stat['base_stat'];
+          break;
+        case 'defense':
+          defense = stat['base_stat'];
+          break;
+        case 'speed':
+          speed = stat['base_stat'];
+          break;
+        case 'special-attack':
+          specialAttack = stat['base_stat'];
+          break;
+        case 'special-defense':
+          specialDefense = stat['base_stat'];
+          break;
+        default:
+          break;
+      }
+    });
+
   }
 }
