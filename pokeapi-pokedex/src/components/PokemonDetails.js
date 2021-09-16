@@ -1,4 +1,4 @@
-import React, { Component } from 'react';}
+import React, { Component } from 'react';
 import Axios from 'axios';
 
 const TYPE_COLORS = {
@@ -91,6 +91,44 @@ export default class PokemonDetails extends Component {
           break;
       }
     });
+
+    // Constante de las caracteristicas
+
+    const height = pokemonRes.data.height;
+
+    const weight = pokemonRes.data.weight;
+
+    const types = pokemonRes.data.types.map(type => type.type.name);
+
+    const themeColor = `${TYPE_COLORS[types[types.length - 1]]}`;
+
+    const abilities = pokemonRes.data.abilities
+      .map(ability => {
+        return ability.ability.name
+          .toLowerCase()
+          .split('-')
+          .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(' ');
+      })
+      .join(', ');
+      
+    const evs = pokemonRes.data.stats
+      .filter(stat => {
+        if (stat.effort > 0) {
+          return true;
+        }
+        return false;
+      })
+      .map(stat => {
+        return `${stat.effort} ${stat.stat.name
+          .toLowerCase()
+          .split('-')
+          .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(' ')}`;
+      })
+      .join(', ');
+    
+      
 
   }
 }
